@@ -1,0 +1,4 @@
+numpy==1.24.2
+casadi==3.5.6rc2
+matplotlib==3.7.1
+joblib==1.2.0

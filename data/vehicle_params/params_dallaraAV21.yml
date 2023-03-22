@@ -1,0 +1,39 @@
+---
+vehicle_params:
+  m: 750.0  # vehicle mass in kg
+  rho: 1.225  # air density in kg / m^3
+  C_D_A: 0.725  # drag area coefficient (c*A)
+  C_Lf_A: 0.522  # front lift area coefficient
+  C_Lr_A: 1.034  # rear lift area coefficient
+  h: 0.275  # height of center of mass in m
+  w: 2.971  # wheelbase in m
+  a: 1.724  # longitudinal distance of the center of mass in m
+  b: 1.247  # longitudinal distance of the center of mass in m
+  T: 1.5815  # vehicle track in m
+  epsilon: 0.5  # roll stiffness ratio
+  gamma: 1  # braking ration F_xf / F_xr
+  P_max: 357000  # power in W
+  delta_max: 0.43  # maximum steering angle in rad
+  v_max: 90  # maximum velocity in m/s
+  total_width: 1.93  # total width in m
+  total_length: 4.9  # total length in m
+
+tire_params:
+  p_Cx_1: 2.0  # longitudinal shape factor
+  p_Dx_1: 1.7168  # max longitudinal friction coefficient
+  p_Dx_2: -0.289  # longitudinal friction load dependency factor
+  p_Ex_1: 0.6975  # longitudinal curvature factor
+  p_Kx_1: 63.75  # max longitudinal stiffness coefficient
+  p_Kx_3: 0.2891  # max longitudinal stiffness coefficient
+  lambda_mu_x: 0.93  # longitudinal scaling factor
+  p_Cy_1: 1.603  # lateral shape factor
+  p_Dy_1: 1.654  # max lateral friction coefficient
+  p_Dy_2: -0.1783  # lateral friction load dependency factor
+  p_Ey_1: -1.409  # lateral curvature factor
+  p_Ky_1: -53.05  # max lateral stiffness coefficient
+  p_Ky_2: 4.1265  # max lateral stiffness coefficient
+  lambda_mu_y: 0.84  # lateral scaling factor
+  N_0: 3114  # nominal load
+  N_max: 20000  # maximum allowed wheel load
+  kappa_max: 1.5  # maximum longitudinal slip
+  lambda_max: 1.6  # maximum longitudinal slip
