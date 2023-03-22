@@ -2,20 +2,22 @@
 This repository provides the code for the racing line planning algorithms explained in (paper link).
 This includes: 
 
+- The (offline) generation of gg-diagrams that depend on the total Velocity $V$ and the apparent vertial acceleration $\tilde{g}$ according to [X]
+- The (offline) smoothing of the 3D track according to [X]
 - The (offline) generation of a global racing line using Casadi 
 - The (online) generation of a local racing line using Acados
 
 ## Dependencies
-All scripts have been tested on Ubuntu 22.04.2 LTS with Python 3.10.6.
+All scripts have only been tested on Ubuntu 22.04.2 LTS with Python 3.10.6 and the package versions listed in [requirements.txt](requirements.txt).
 
-Install Acados following https://docs.acados.org/installation/#linux-mac.
+1. Install Acados following https://docs.acados.org/installation/#linux-mac.
 
-Install the Python interface following https://docs.acados.org/python_interface/index.html.
+2. Install the Python interface following https://docs.acados.org/python_interface/index.html.
 
-Install other Python packages:
-```
-pip install -r requirements.txt
-```
+3. Install other used Python packages:
+    ```
+    pip install -r requirements.txt
+    ```
 
 ## Workflow
 
@@ -30,3 +32,5 @@ pip install -r requirements.txt
 #### Global Racing Line (offline)
 
 #### Local Racing Line (online)
+
+## References
