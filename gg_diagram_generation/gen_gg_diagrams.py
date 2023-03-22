@@ -6,7 +6,7 @@ from calc_max_slip_map import calc_max_slip_map
 from matplotlib import pyplot as plt
 import multiprocessing
 from joblib import Parallel, delayed
-import subprocess
+import tqdm
 
 # settings
 vehicle_name = 'dallaraAV21'
@@ -31,7 +31,7 @@ alpha_list_interp = np.linspace(-np.pi, np.pi, 250)  # for outputting gggv diagr
 dir_path = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(dir_path, '..', 'data')
 vehicle_params_path = os.path.join(data_path, 'vehicle_params', 'params_' + vehicle_name + '.yml')
-out_path = os.path.join(data_path, 'ggg_diagrams', vehicle_name)
+out_path = os.path.join(data_path, 'gg_diagrams', vehicle_name)
 
 num_cores = multiprocessing.cpu_count()
 
@@ -42,9 +42,10 @@ vehicle_params = params['vehicle_params']
 tire_params = params['tire_params']
 
 # calculate maximum slip maps for normal loads
-N_list, kappa_max_list, lambda_max_list = calc_max_slip_map(tire_params=tire_params, debug_plots=debug_plots)
+N_list, kappa_max_list, lambda_max_list = calc_max_slip_map(tire_params=tire_params)
 kappa_max = interpolant("kappa_max", "bspline", [N_list], np.abs(kappa_max_list))
 lambda_max = interpolant("lambda_max", "bspline", [N_list], np.abs(lambda_max_list))
+
 
 # function to calculate ax, ay points for given absolute velocity and g-force base don two-track model
 def calc_gg_points(V, g_force, alpha_list):
@@ -180,14 +181,6 @@ def calc_gg_points(V, g_force, alpha_list):
     k_t_braking = 1.0 / (1.0 + vehicle_params["gamma"])
     k_t_diff = 1.0 - k_t_braking
     k_t = Function("k_t", [a_x_n], [(1 - k_t_diff) + k_t_diff * (0.5 + 0.5 * tanh(10 * a_x))])
-    if debug_plots and verbose_debug_plots:
-        plt.figure()
-        plt.title(rf"Driving force distribution factor $k_t$")
-        x = np.linspace(-10 / a_x_s, 5 / a_x_s, 200)
-        y = k_t(x)
-        plt.plot(x * a_x_s, np.array(y).flatten())
-        plt.xlabel(rf"$a_x$")
-        plt.ylabel(rf"$k_t$")
 
     # aerodynamic forces
     F_D = 0.5 * vehicle_params["rho"] * vehicle_params["C_D_A"] * u**2  # drag force
@@ -600,7 +593,6 @@ def calc_rho_for_V(V):
 
 
 if __name__ == "__main__":
-    v_max_found = False
     V_list = np.linspace(V_min, V_max, V_N)
 
     processed_list = Parallel(

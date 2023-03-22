@@ -107,3 +107,5 @@ def calc_max_slip_map(tire_params: dict, debug_plots: bool = False):
         plt.show()
 
     return N_list_res, kappa_max_list, lambda_max_list
+
+# EOF

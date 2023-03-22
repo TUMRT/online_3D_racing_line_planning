@@ -3,3 +3,4 @@ casadi==3.5.6rc2
 matplotlib==3.7.1
 joblib==1.2.0
 PyYAML==6.0
+tqdm==4.65.0

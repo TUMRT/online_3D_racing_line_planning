@@ -133,8 +133,5 @@ dmypy.json
 
 # Generated data
 data/gg_diagrams/*
-!data/gg_diagrams/README.md
 data/global_racing_lines/*
-!data/global_racing_lines/README.md
 data/smoothed_tracks/*
-!data/smoothed_tracks/README.md

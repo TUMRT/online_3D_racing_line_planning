@@ -1,1 +1,0 @@
-Folder for generated global racing lines
