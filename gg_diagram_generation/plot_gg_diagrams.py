@@ -23,6 +23,9 @@ gg_handler = GGManager(
 v_test = np.linspace(0.0, gg_handler.V_max, 5)
 g_test = np.linspace(0.0, gg_handler.g_max, 100)
 alpha_test = np.linspace(-np.pi, np.pi, 300)
+g = 9.81
+# g = 0.5 * 9.81
+# g = 2.0 * 9.81
 
 fig_polar = plt.figure('Polar coordinates')
 ax_polar = fig_polar.add_subplot(projection='3d')
@@ -40,7 +43,6 @@ for V in v_test:
             Z_test[g_i, alpha_i] = gg_handler.rho_interpolator_no_margin([V, g, alpha])
     ax_polar.plot_surface(Y_test, X_test, Z_test)
 
-    g = 9.81
     gg_exponent = float(gg_handler.gg_exponent_interpolator(ca.vertcat(V, g)))
     ax_max = float(gg_handler.ax_max_interpolator(ca.vertcat(V, g)))
     ax_min = float(gg_handler.ax_min_interpolator(ca.vertcat(V, g)))

@@ -134,4 +134,5 @@ dmypy.json
 # Generated data
 data/gg_diagrams/*
 data/global_racing_lines/*
-data/smoothed_tracks/*
+data/smoothed_track_data/*
+data/3d_track_data/*

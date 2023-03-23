@@ -162,7 +162,7 @@ class Track3D:
 
         # Visualize.
         if visualize:
-            fig = plt.figure('Angular track information.')
+            fig = plt.figure('Angular information')
             ax = fig.add_subplot(311)
             ax.plot(s_m, euler_angles_rad[:, 0], label=r'$\theta$')
             ax.plot(s_m, euler_angles_rad[:, 1], label=r'$\mu$')
@@ -203,11 +203,10 @@ class Track3D:
         self.__track_data_frame.to_csv(path_or_buf=self.__path, sep=',', index=False, float_format='%.6f')
         return
 
-    def generate_3d_from_3d_track_bounds(self, path, out_path, ignore_banking = False, visualize = False):
+    def generate_3d_from_3d_track_bounds(self, path, out_path, ignore_banking=False, visualize=False):
         if self.track_locked:
             raise RuntimeError('The track is locked and cannot be changed.')
         print('Generating 3d track file from 3d track bounds ...')
-        raw_data_frame = pd.read_csv(path, sep=',')
         self.__path = path
 
         # import track bounds
@@ -277,53 +276,23 @@ class Track3D:
             omega_radpm[i] = Jac.dot(deuler)
 
         if visualize:
-            plt.figure()
-            ax = plt.axes(projection='3d')
-            ax.plot3D(right_track_bounds_m[:, 0], right_track_bounds_m[:, 1], right_track_bounds_m[:, 2], 'k')
-            ax.plot3D(left_track_bounds_m[:, 0], left_track_bounds_m[:, 1], left_track_bounds_m[:, 2], 'k')
-            ax.plot3D(center_line_m[:, 0], center_line_m[:, 1], center_line_m[:, 2], 'b')
-            for i in range(0, len(center_line_m), 100):
-                ax.plot3D([center_line_m[i, 0], center_line_m[i, 0] + tangential_vector[i, 0]],
-                          [center_line_m[i, 1], center_line_m[i, 1] + tangential_vector[i, 1]],
-                          [center_line_m[i, 2], center_line_m[i, 2] + tangential_vector[i, 2]], 'r')
-                ax.plot3D([center_line_m[i, 0], center_line_m[i, 0] + normal_vector[i, 0]],
-                          [center_line_m[i, 1], center_line_m[i, 1] + normal_vector[i, 1]],
-                          [center_line_m[i, 2], center_line_m[i, 2] + normal_vector[i, 2]], 'r')
-                ax.plot3D([center_line_m[i, 0], center_line_m[i, 0] + orthogonal_vector[i, 0]],
-                          [center_line_m[i, 1], center_line_m[i, 1] + orthogonal_vector[i, 1]],
-                          [center_line_m[i, 2], center_line_m[i, 2] + orthogonal_vector[i, 2]], 'r')
-            ax.set_xlabel("x")
-            ax.set_ylabel("y")
-            ax.set_zlabel("z")
-#            ax.axis('equal')
-
-            fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
-            ax1.plot(s_m, euler_angles_rad[:, 0] * 180 / np.pi)
-            ax1.set_xlabel('s in m')
-            ax1.set_ylabel('theta in °')
-            ax1.grid()
-            ax2.plot(s_m, euler_angles_rad[:, 1] * 180 / np.pi)
-            ax2.set_xlabel('s in m')
-            ax2.set_ylabel('mu in °')
-            ax2.grid()
-            ax3.plot(s_m, euler_angles_rad[:, 2] * 180 / np.pi)
-            ax3.set_xlabel('s in m')
-            ax3.set_ylabel('phi in °')
-            ax3.grid()
-
-            fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
-            ax1.plot(s_m, deuler_angles_radpm[:, 0])
-            ax1.set_xlabel('s in m')
-            ax1.set_ylabel('theta_prime in rad/s')
-            ax1.grid()
-            ax2.plot(s_m, deuler_angles_radpm[:, 1])
-            ax2.set_xlabel('s in m')
-            ax2.set_ylabel('mu_prime in rad/s')
-            ax2.grid()
-            ax3.plot(s_m, deuler_angles_radpm[:, 2])
-            ax3.set_xlabel('s in m')
-            ax3.set_ylabel('phi_prime in rad/s')
-            ax3.grid()
+            fig = plt.figure('Angular information')
+            ax = fig.add_subplot(311)
+            ax.plot(s_m, euler_angles_rad[:, 0], label=r'$\theta$')
+            ax.plot(s_m, euler_angles_rad[:, 1], label=r'$\mu$')
+            ax.plot(s_m, euler_angles_rad[:, 2], label=r'$\phi$')
+            ax.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+            ax = fig.add_subplot(312)
+            ax.plot(s_m, deuler_angles_radpm[:, 0], label=r'$\frac{d\theta}{ds}$')
+            ax.plot(s_m, deuler_angles_radpm[:, 1], label=r'$\frac{d\mu}{ds}$')
+            ax.plot(s_m, deuler_angles_radpm[:, 2], label=r'$\frac{d\phi}{ds}$')
+            ax.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+            ax = fig.add_subplot(313)
+            ax.plot(s_m, omega_radpm[:, 0], label=r'$\Omega_x$')
+            ax.plot(s_m, omega_radpm[:, 1], label=r'$\Omega_y$')
+            ax.plot(s_m, omega_radpm[:, 2], label=r'$\Omega_z$')
+            ax.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+            fig.tight_layout()
             plt.show()
 
         # Create new data frame.
@@ -347,10 +316,12 @@ class Track3D:
         self.__path = out_path
         self.__track_data_frame.to_csv(path_or_buf=self.__path, sep=',', index=False, float_format='%.6f')
 
-    def smooth_track(self, out_path: str, weights: dict, step_size=3.0, visualize=False):
+    def smooth_track(self, out_path: str, weights: dict, step_size=2.0, visualize=False, in_path=None):
         if self.track_locked:
             raise RuntimeError('The track is locked and cannot be changed.')
         print('Smoothing 3d track ...')
+        if in_path is not None:
+            self.__path = in_path
         # Load data frame.
         self.__track_data_frame = pd.read_csv(self.__path, sep=',')
 
@@ -575,7 +546,6 @@ class Track3D:
         nlp = {'f': J, 'x': w, 'g': g}
         opts = {"expand": False,
                 "verbose": False,
-                #"ipopt.hessian_approximation": 'limited-memory',
                 }
         solver = ca.nlpsol('solver', 'ipopt', nlp, opts)  # ipopt
 
@@ -723,54 +693,32 @@ class Track3D:
             ax.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
             fig.tight_layout()
 
-            # Tracks.
-            fig = plt.figure("Tracks")
-            ax = plt.axes(projection='3d')
-            ax.plot3D(p_opt[0], p_opt[1], p_opt[2], color='green')
-            ax.plot3D(right_opt[0], right_opt[1], right_opt[2], color='green')
-            ax.plot3D(left_opt[0], left_opt[1], left_opt[2], color='green')
-            ax.plot3D(p_old[0], p_old[1], p_old[2], color='red')
-            ax.plot3D(right_old[0], right_old[1], right_old[2], color='red')
-            ax.plot3D(left_old[0], left_old[1], left_old[2], color='red')
-            ax.set_xlabel("x")
-            ax.set_ylabel("y")
-            ax.set_zlabel("z")
-
-            # Show plots.
             plt.show()
 
-    def visualize(self, show: bool = True, ax = None):
+    def visualize(self, show: bool = True, ax=None):
         if not self.track_locked:
             raise RuntimeError('Cannot visualize. Track is not locked.')
+
+        # left and right bound
+        left, right = self.get_track_bounds()
+
         # Create figure.
         if ax is None:
-            fig = plt.figure()
+            fig = plt.figure('Track')
             ax_track = plt.axes(projection='3d')
         else:
             ax_track = ax
 
         ax_track.grid()
-        #ax_track.set_aspect("equal")
-        # Create normal vectors.
-        normal_vector = self.get_normal_vector_numpy(self.theta, self.mu, self.phi)
-        normal_x = normal_vector[0]
-        normal_y = normal_vector[1]
-        normal_z = normal_vector[2]
+        ax_track.set_box_aspect((np.ptp(left[0]), np.ptp(left[1]), np.ptp(left[2])))  # aspect ratio is 1:1:1 in data space
 
-        # Create points for right and left boundary.
-        left = np.array([self.x + normal_x * self.w_tr_left,
-                         self.y + normal_y * self.w_tr_left,
-                         self.z + normal_z * self.w_tr_left])
-        right = np.array([self.x + normal_x * self.w_tr_right,
-                          self.y + normal_y * self.w_tr_right,
-                          self.z + normal_z * self.w_tr_right])
 
         # Plot left border.
-        ax_track.plot3D(left[0], left[1], left[2], 'k')
+        ax_track.plot(left[0], left[1], left[2], 'k')
         # Plot right border.
-        ax_track.plot3D(right[0], right[1], right[2], 'k')
+        ax_track.plot(right[0], right[1], right[2], 'k')
 
-        fig, ax = plt.subplots(nrows=3)
+        fig, ax = plt.subplots(nrows=3, num='Angular information')
         ax[0].grid()
         ax[0].plot(self.s, rad2deg(self.theta), label=r'$\theta$')
         ax[0].plot(self.s, rad2deg(self.mu), label=r'$\mu$')
@@ -793,128 +741,8 @@ class Track3D:
         ax[2].set_xlabel(r'$s$ in m')
         ax[2].legend()
 
-        # Tracks.
-        fig = plt.figure("Tracks")
-        ax = plt.axes(projection='3d')
-        ax.plot3D(left[0],left[1],left[2], color='k')
-        ax.plot3D(right[0],right[1],right[2], color='k')
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("z")
-       # ax.set_aspect('equal')
-
         if show: plt.show()
         return ax_track
-
-    def calc_chi_from_2d_heading(self, heading2d, s):
-        heading2d_tmp = np.atleast_1d(heading2d)
-
-        # vector of length 1 in direction of heading in global frame
-        vec_glob = np.array([
-            np.cos(heading2d_tmp),
-            np.sin(heading2d_tmp),
-            np.zeros_like(heading2d_tmp)
-        ]).transpose()
-
-        # transpose rotation matrix for s coordinates
-        R_t = np.atleast_3d(self.get_rotation_matrix_numpy(
-            self.theta_interpolator(s),
-            self.mu_interpolator(s),
-            self.phi_interpolator(s)
-        )).transpose()
-
-        # vector of length 1 in local frame at s
-        vec_loc = np.einsum('ijk,ik->ij', R_t, vec_glob)
-
-        chi = np.arctan2(vec_loc[:, 1], vec_loc[:, 0])
-        return chi[0] if isinstance(s, float) else chi
-
-    def calc_2d_heading_from_chi(self, chi, s):
-        # vector of length 1 in direction of heading in ribbon frame
-        if isinstance(chi, float):
-            vec_loc = np.atleast_2d([
-                np.cos(chi),
-                np.sin(chi),
-                np.zeros_like(chi)
-            ])
-        else:
-            vec_loc = np.array([
-                np.cos(chi),
-                np.sin(chi),
-                np.zeros_like(chi)
-            ]).transpose()
-
-        # rotation matrix for s coordinates
-        R = np.atleast_3d(self.get_rotation_matrix_numpy(
-            self.theta_interpolator(s),
-            self.mu_interpolator(s),
-            self.phi_interpolator(s)
-        ))
-
-        # vector of length 1 in global frame at s
-        vec_glob = np.einsum('jki,ik->ij', R, vec_loc)
-
-        heading_2d = np.arctan2(vec_glob[:, 1], vec_glob[:, 0])
-
-        return heading_2d[0] if isinstance(chi, float) else heading_2d
-
-    def project_2d_point_on_track(self, x: Union[np.array, float], y: Union[np.array, float], s0: Union[np.array, float] = None, n0: Union[np.array, float] = None, n_recursion: int = 0) -> Union[np.array, float]:
-        if not self.track_locked:
-            raise RuntimeError('Cannot project. Track is not locked.')
-
-        # convert to numpy array, if input is scalar (float)
-        scalar = False
-        if isinstance(x, float):
-            x = np.expand_dims(x, axis=0)
-            y = np.expand_dims(y, axis=0)
-            if s0 is not None: s0 = np.expand_dims(s0, axis=0)
-            if n0 is not None: n0 = np.expand_dims(n0, axis=0)
-            scalar = True
-
-        # initial guess for root finding
-        if s0 is None:
-            s0 = self.s[np.argmin((np.tile(np.expand_dims(x, axis=1), (len(self.x))) - self.x)**2 + (np.tile(np.expand_dims(y, axis=1), (len(self.y))) - self.y)**2, axis=1)]
-        if n0 is None:
-            n0 = np.zeros_like(s0)
-
-        # formulate function for root finding
-        s = ca.MX.sym('s', len(s0))
-        d = ca.MX.sym('d', len(n0))
-        x_ref = self.x_interpolator(s)
-        y_ref = self.y_interpolator(s)
-        normal_vector = self.get_normal_vector_casadi(
-            self.theta_interpolator(s),
-            self.mu_interpolator(s),
-            self.phi_interpolator(s)
-        )
-        g0 = ca.vertcat(x - x_ref - d * normal_vector[0:len(x)],
-                        y - y_ref - d * normal_vector[len(x):2*len(x)])
-        g = ca.Function('g', [ca.vertcat(s, d)], [g0])
-
-        # get solution
-        G = ca.rootfinder('G', 'newton', g)
-        sol = G(ca.vertcat(s0, n0))
-        s_sol_array = np.array(sol[0:len(x)])
-        n_sol_array = np.array(sol[len(x):2 * len(x)])
-
-        # repeat with last s-coordinate as initial guess if s-coordinate is negative (closed track)
-        for i, s_sol in enumerate(s_sol_array):
-            if s_sol < 0.0:
-                if n_recursion < 1:  # allow only one recursion
-                    s_sol_array[i], n_sol_array[i] = self.project_2d_point_on_track(x[i], y[i], s0=self.s[-1], n_recursion=n_recursion + 1)
-                else:
-                    print('WARNING: Maximum recursion reached in 3d matching. Using approximate matching point!')
-                    s_sol_array[i] = self.s[-1] + s_sol_array[i]
-
-        # convert back to float, if input is scalar
-        if scalar:
-            sol1 = float(s_sol_array)
-            sol2 = float(n_sol_array)
-        else:
-            sol1 = np.squeeze(s_sol_array)
-            sol2 = np.squeeze(n_sol_array)
-
-        return sol1, sol2
 
     def sn2cartesian(self, s, n, normal_vector_factor: float = 1.0):
         if not self.track_locked:
@@ -931,17 +759,6 @@ class Track3D:
         ]).squeeze().transpose()
 
         return ref_p + (self.get_normal_vector_numpy(*euler_p) * normal_vector_factor * n).transpose()
-
-    def check_on_track(
-            self,
-            x: float,
-            y: float,
-            margin: float = 0.0
-    ):
-        s, n = self.project_2d_point_on_track(x, y)
-        width_left = self.w_tr_left_interpolator(s) - margin
-        width_right = self.w_tr_right_interpolator(s) + margin
-        return width_right < n < width_left
 
     def calc_apparent_accelerations(
             self, V, n, chi, ax, ay, s, h,
@@ -1002,43 +819,7 @@ class Track3D:
         g_tilde = ca.fmax(w_dot - V_omega + (omega_x ** 2 - omega_y ** 2) * h + g_earth * ca.cos(mu) * ca.cos(phi), 0.0)
 
         return ax_tilde, ay_tilde, g_tilde
-
-    def calc_apparent_accelerations_numpy(
-            self,
-            s,
-            V,
-            n,
-            chi,
-            ax,
-            ay,
-    ):
-        mu = np.interp(s, self.s, self.mu)
-        phi = np.interp(s, self.s, self.phi)
-        Omega_x = np.interp(s, self.s, self.Omega_x)
-        Omega_y = np.interp(s, self.s, self.Omega_y)
-        Omega_z = np.interp(s, self.s, self.Omega_z)
-
-        s_dot = (V * np.cos(chi)) / (1.0 - n * Omega_z)
-        
-        ax_tilde = ax + g_earth * (- np.sin(mu) * np.cos(chi) + np.cos(mu) * np.sin(phi) * np.sin(chi))
-        ay_tilde = ay + g_earth * (np.sin(mu) * np.sin(chi) + np.cos(mu) * np.sin(phi) * np.cos(chi))
-        g_tilde = np.maximum((Omega_x * np.sin(chi) - Omega_y * np.cos(chi)) * s_dot * V + g_earth * np.cos(mu) * np.cos(phi), 0.0)
-
-        return ax_tilde, ay_tilde, g_tilde
-
-    def calc_acceleration_numpy(
-            self,
-            s,
-            chi,
-            ax_tilde,
-            ay_tilde,
-    ):
-        mu = np.interp(s, self.s, self.mu)
-        phi = np.interp(s, self.s, self.phi)
-        ax = ax_tilde - g_earth * (- np.sin(mu) * np.cos(chi) + np.cos(mu) * np.sin(phi) * np.sin(chi))
-        ay = ay_tilde - g_earth * (np.sin(mu) * np.sin(chi) + np.cos(mu) * np.sin(phi) * np.cos(chi))
-        return ax, ay
-
+ 
     def get_track_bounds(self, margin=0.0):
         normal_vector = self.get_normal_vector_numpy(self.theta, self.mu, self.phi)
         left = np.array([self.x + normal_vector[0] * (self.w_tr_left + margin),
@@ -1077,4 +858,4 @@ class Track3D:
             [0, -np.sin(phi), np.cos(mu) * np.cos(phi)]
         ])
 
-
+# EOF

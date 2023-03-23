@@ -15,21 +15,23 @@ visualize = True
 ignore_banking = False  # sets phi and mu to zero (rotation around x- and y-axis)
 
 # Dict for cost function of track smoothing.
-weights = {'w_c': 1e0,  # deviation to measurements centerline
-           'w_l': 1e0,  # deviation to measurements left bound
-           'w_r': 1e0,  # deviation to measurements right bound
-           'w_theta': 1e5,  # smoothness theta
-           'w_mu': 1e4,  # smoothness mu
-           'w_phi': 5e3,  # smoothness phi
-           'w_nl': 1e-2,  # smoothness left bound
-           'w_nr': 1e-2}  # smoothness right bound
+weights = {
+    'w_c': 1e0,  # deviation to measurements centerline
+    'w_l': 1e0,  # deviation to measurements left bound
+    'w_r': 1e0,  # deviation to measurements right bound
+    'w_theta': 1e5,  # smoothness theta
+    'w_mu': 1e4,  # smoothness mu
+    'w_phi': 5e3,  # smoothness phi
+    'w_nl': 1e-2,  # smoothness left bound
+    'w_nr': 1e-2  # smoothness right bound
+}
 
 # paths
 dir_path = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(dir_path, '..', 'data')
+data_path = os.path.join(dir_path, '', 'data')
 raw_data_path = os.path.join(data_path, 'raw_track_data')
 tmp_data_path = os.path.join(dir_path, 'tmp_track_data')
-processed_data_path = os.path.join(dir_path, '..', 'data', 'processed_tracks',)
+processed_data_path = os.path.join(dir_path, '', 'data', 'processed_tracks', )
 os.makedirs(tmp_data_path, exist_ok=True)
 
 track_handler = Track3D()
