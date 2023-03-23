@@ -718,7 +718,7 @@ class Track3D:
         # Plot right border.
         ax_track.plot(right[0], right[1], right[2], 'k')
 
-        fig, ax = plt.subplots(nrows=3, num='Angular information')
+        fig, ax = plt.subplots(nrows=3, num='Track angular information')
         ax[0].grid()
         ax[0].plot(self.s, rad2deg(self.theta), label=r'$\theta$')
         ax[0].plot(self.s, rad2deg(self.mu), label=r'$\mu$')

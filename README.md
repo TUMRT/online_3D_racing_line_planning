@@ -71,8 +71,20 @@ python track_processing/plot_track.py
 ```
 
 ### 4. Racing Line Generation
+We distinguish between the global and the local racing line. The global racing line is the closed racing line around the track. It is generated offline and implemented using Casadi. A constraint of the formulated OCP is that the start state must equal the end state.
 
+In contrast to the global racing line, the local racing line has a limited spatial horizon and is the time-optimal trajectory for the upcoming track section. It is generated online with a moving horizon and implemented using Acados.
 #### Global Racing Line (offline)
+To generate the global racing line run the script: 
+```
+python global_racing_line/gen_global_racing_line.py
+```
+Note that it may take some time until the OCP converges.
+
+You can visualize the global racing line with:
+```
+python global_racing_line/plot_global_racing_line.py
+```
 
 #### Local Racing Line (online)
 
