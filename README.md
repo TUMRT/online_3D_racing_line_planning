@@ -12,6 +12,7 @@ This includes:
 
 - This repository does not intend to provide a directly applicable trajectory planner, installable Python package, or ready to use ROS node. It is rather a collection of methods and algorithms used in the paper [x].
 - All paths are relative. If you move a file you have to adapt the paths accordingly.
+- Please cite our work as proposed in [Citing](#citing) if you use the provided code or parts of it. 
 
 ## Dependencies
 All scripts have only been tested on Ubuntu 22.04.2 LTS with Python 3.10.6 and the package versions listed in [requirements.txt](requirements.txt).
@@ -43,6 +44,16 @@ The resulting lookup tables for both frames will be added to [data/gg_diagrams](
 Vehicle parameters can be changed or added in [data/vehicle_params](data/vehicle_params). If you add a vehicle or change the vehicle name you have to adapt the name in the above scripts as well.
 
 ### 2. Track Data
+To create a 3D track according to the representation in [X] the track must be available in one of the two data formats:
+
+1. Global $x$ and $y$ coordinates of a reference line (e.g. centerline) which is assumed to be at $z=0$, the widths to the left and right boundary (projected on the xy-plane) and the banking angle. An example for the Las Vegas Motor Speedway is given in [data/raw_track_data/LVMS_2d_centerline_banking.csv](data/raw_track_data/LVMS_2d_centerline_banking.csv). This track representation is especially suited for oval tracks with small slopes but large banking angles.
+2. Global $x$, $y$, and $z$ coordinates of track boundary pairs. An example for the Mount Panorama Circuit in Bathurst is given in [data/raw_track_data/mount_panorama_3d.csv](data/raw_track_data/mount_panorama_3d.csv)
+
+To generate the 3D track data run the script:
+```
+python track_processing/gen_3d_track_data.py
+```
+Make sure to select the correct method for the present track format (1. or 2.). This will create the track data files in [data/3d_tracks](data/3d_tracks) with the needed coordinates, euler angles, and angular velocities.
 
 ### 3. Track Smoothing
 
@@ -51,6 +62,8 @@ Vehicle parameters can be changed or added in [data/vehicle_params](data/vehicle
 #### Global Racing Line (offline)
 
 #### Local Racing Line (online)
+
+## Citing
 
 
 ## References
