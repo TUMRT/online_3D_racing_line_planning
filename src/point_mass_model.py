@@ -116,7 +116,7 @@ def export_point_mass_ode_model(
     if gg_mode == 'polar':
         rho = ca.sqrt(ax_tilde ** 2 + ay_tilde ** 2)
         alpha = ca.arctan2(ax_tilde, ay_tilde)
-        adherence_radius = gg_handler.gggv_interpolator(ca.vertcat(V, g_tilde, alpha))
+        adherence_radius = gg_handler.rho_interpolator(ca.vertcat(V, g_tilde, alpha))
         model.con_h_expr = ca.vertcat(
             adherence_radius - rho,
         )

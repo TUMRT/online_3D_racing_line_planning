@@ -762,8 +762,8 @@ class Track3D:
 
     def calc_apparent_accelerations(
             self, V, n, chi, ax, ay, s, h,
-            neglect_w_omega_y: bool = False, neglect_w_omega_x: bool = False, neglect_euler: bool = False, 
-            neglect_centrifugal: bool = False, neglect_w_dot: bool = False, neglect_V_omega: bool = False,
+            neglect_w_omega_y: bool = True, neglect_w_omega_x: bool = True, neglect_euler: bool = True,
+            neglect_centrifugal: bool = True, neglect_w_dot: bool = False, neglect_V_omega: bool = False,
     ):
         if not self.track_locked:
             raise RuntimeError('Cannot calculate apparent accelerations. Track is not locked.')
