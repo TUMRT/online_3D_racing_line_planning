@@ -215,9 +215,8 @@ class LocalRacinglinePlanner():
             ax: float,
             ay: float,
             safety_distance: float,
-            tube_width: float,
-            V_min: float,
             prev_solution: dict,
+            V_min: float = 5.0,
     ):
         V_max = self.vehicle_params['v_max']
         raceline = self.__gen_raceline(
@@ -229,7 +228,6 @@ class LocalRacinglinePlanner():
             ay=ay,
             prev_solution=prev_solution if V > V_min else None,
             safety_distance=safety_distance,
-            tube_width=tube_width,
             V_max=V_max,
         )
 
@@ -258,7 +256,6 @@ class LocalRacinglinePlanner():
             ay: float,
             prev_solution: dict,
             safety_distance: float,
-            tube_width: float,
             V_max: float,
     ):
         N = self.ocp.dims.N
@@ -304,13 +301,13 @@ class LocalRacinglinePlanner():
         w_tr_left = np.interp(
             s_array % self.track_handler.s[-1],
             self.track_handler.s,
-            discont=self.track_handler.w_tr_left,
+            self.track_handler.w_tr_left,
             period=self.track_handler.s[-1]
         )
         w_tr_right = np.interp(
             s_array % self.track_handler.s[-1],
             self.track_handler.s,
-            discont=self.track_handler.w_tr_right,
+            self.track_handler.w_tr_right,
             period=self.track_handler.s[-1]
         )
         veh_width = self.vehicle_params['total_width']
@@ -334,12 +331,12 @@ class LocalRacinglinePlanner():
                 self.solver.constraints_set(
                     stage_=i,
                     field_='lbx',
-                    value_=np.array([w_tr_right[i] + veh_width / 2.0 + (safety_distance + tube_width), - np.pi / 2.0])
+                    value_=np.array([w_tr_right[i] + veh_width / 2.0 + (safety_distance), - np.pi / 2.0])
                 )
                 self.solver.constraints_set(
                     stage_=i,
                     field_='ubx',
-                    value_=np.array([w_tr_left[i] - veh_width / 2.0 - (safety_distance + tube_width), np.pi / 2.0])
+                    value_=np.array([w_tr_left[i] - veh_width / 2.0 - (safety_distance), np.pi / 2.0])
                 )
 
             u_guess = np.array([jx_array[i], jy_array[i], V_exceed])
@@ -368,6 +365,10 @@ class LocalRacinglinePlanner():
                 value_=np.array([V_max])
             )
 
+        # solve OCP
+        self.solver.solve()
+
+        # extract solution
         X = np.zeros((N, 6))
         U = np.zeros((N, 3))
 
