@@ -1,19 +1,18 @@
 from acados_template import AcadosModel
 import casadi as ca
-import types
 
 def export_point_mass_ode_model(
         vehicle_params,
         track_handler,
-        gggv_handler,
+        gg_handler,
         optimization_horizon: float,
-        gggv_mode: str = 'polar',
+        gg_mode: str = 'polar',
         weight_jerk: float = 1e-2,
         neglect_w_terms: bool = True,
         neglect_euler: bool = True,
         neglect_centrifugal: bool = True,
-        neglect_w_dot: bool = True,
-        w_slack_V: float = 1e6,
+        neglect_w_dot: bool = False,
+        w_slack_V: float = 20.0,
 ):
 
     model_name = 'point_mass_ode'
@@ -42,7 +41,6 @@ def export_point_mass_ode_model(
     epsilon_V = ca.MX.sym('epsilon_V')
     # Control vector and longitudinal position on track
     u = ca.vertcat(jx, jy, epsilon_V)
-
 
     # Derivatives with respect to s (not time!)
     ds = ca.MX.sym('ds')
@@ -115,15 +113,15 @@ def export_point_mass_ode_model(
     )
 
     # gggv-diagram constraints
-    if gggv_mode == 'polar':
+    if gg_mode == 'polar':
         rho = ca.sqrt(ax_tilde ** 2 + ay_tilde ** 2)
         alpha = ca.arctan2(ax_tilde, ay_tilde)
-        adherence_radius = gggv_handler.gggv_interpolator(ca.vertcat(V, g_tilde, alpha))
+        adherence_radius = gg_handler.gggv_interpolator(ca.vertcat(V, g_tilde, alpha))
         model.con_h_expr = ca.vertcat(
             adherence_radius - rho,
         )
-    elif gggv_mode == 'diamond':
-        acc_max = gggv_handler.acc_interpolator(ca.vertcat(V, g_tilde))
+    elif gg_mode == 'diamond':
+        acc_max = gg_handler.acc_interpolator(ca.vertcat(V, g_tilde))
         gg_exponent = acc_max [0]
         ax_min = acc_max[1]
         ax_max = acc_max[2]
@@ -137,12 +135,12 @@ def export_point_mass_ode_model(
                         ca.fmin(ca.fabs(ay_tilde) / ay_max, 1.0),
                         gg_exponent
                     ))
-                    , 0.00001
+                    , 1e-3
                 ),
                 1.0 / gg_exponent
             ) - ca.fabs(ax_tilde)
         )
-    else:
-        raise NotImplemented(f'Unknown gggv_mode: {gggv_mode}')
 
-    return model, s_dot
+    return model
+
+# EOF

@@ -136,3 +136,8 @@ data/gg_diagrams/*
 data/global_racing_lines/*
 data/smoothed_track_data/*
 data/3d_track_data/*
+
+# Acados auto-generated
+.run
+c_generated_code
+acados_ocp_nlp.json
