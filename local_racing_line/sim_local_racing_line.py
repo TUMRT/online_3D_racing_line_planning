@@ -11,7 +11,7 @@ params = {
     'track_name': 'mount_panorama_3d_smoothed.csv',
     'optimization_horizon': 300.0,  # in meter
     'vehicle_name': 'dallaraAV21',
-    'gg_mode': 'diamond',  # polar or diamond
+    'gg_mode': 'polar',  # polar or diamond
     'gg_margin': 0.0,
     'safety_distance': 0.5,  # in meter
     'V_max': None,  # V_max in m/s (set to None for limitless)
