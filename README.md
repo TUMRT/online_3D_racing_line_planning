@@ -2,11 +2,11 @@
 This repository provides the code for the racing line planning algorithms explained in [[1]](#1).
 This includes: 
 
-- The (offline) generation of gg-diagrams that depend on the total Velocity $V$ and the apparent vertical acceleration $\tilde{g}$ according to [[2]](#2) and [[3]](#3)
-- The (offline) underapproximation of the true gg-diagrams with diamond shapes
-- The (offline) smoothing of the 3D track according to [[4]](#4)
-- The (offline) generation of a global racing line using [CasADi](https://web.casadi.org/) according to [[3]](#3)
-- The (online) generation of a local racing line using [Acados](https://docs.acados.org/)
+- the (offline) generation of gg-diagrams that depend on the total velocity $V$ and the apparent vertical acceleration $\tilde{g}$ according to [[2]](#2) and [[3]](#3)
+- the (offline) underapproximation of the true gg-diagrams with diamond shapes according to [[1]](#1)
+- the (offline) smoothing of the 3D track according to [[4]](#4)
+- the (offline) generation of a global racing line using [CasADi](https://web.casadi.org/) according to [[3]](#3)
+- the (online) generation of a local racing line using [Acados](https://docs.acados.org/) according to [[1]](#1)
 
 ## Notes
 
@@ -33,7 +33,7 @@ The generation of the gg-diagrams depending on $V$ and $\tilde{g}$ for 3D tracks
  ```
  python gg_diagram_generation/gen_gg_diagrams.py
  ```
-This will create the polar-coordinate representation of the true gg-diagram shapes $\rho(V, \tilde{g}, \alpha)$ in the folder [data/gg_diagrams](data/gg_diagrams) in the vehicle and velocity frame.
+This will create the polar-coordinate representation of the true gg-diagram shapes $\rho(V, \tilde{g}, \alpha)$ in the folder [data/gg_diagrams](data/gg_diagrams) for the vehicle and velocity frame.
 
 To generate the diamond-shaped underapproximations of the gg-diagrams as introduced in [[1]](#1) run:
 ```
@@ -46,10 +46,10 @@ You can visualize the gg-diagrams and its diamond-shaped underapproximations wit
 python gg_diagram_generation/plot_gg_diagrams.py
 ```
 
-Vehicle parameters can be changed or added in [data/vehicle_params](data/vehicle_params). If you add a vehicle or change the vehicle name you have to adapt the name in the above scripts as well.
+Vehicle parameters can be changed or added in [data/vehicle_params](data/vehicle_params). If you add a vehicle or change the vehicle name you have to adapt the name in the above scripts accordingly.
 
 ### 2. Track Data
-To create a 3D track according to the representation in [[4]](#4) the track must be available in one of the two data formats:
+To create a 3D track according to the representation in [[4]](#4), the track must be available in one of the two data formats:
 
 1. Global $x$ and $y$ coordinates of a reference line (e.g. centerline) which is assumed to be at $z=0$, the widths to the left and right boundary (projected on the xy-plane) and the banking angle. An example for the Las Vegas Motor Speedway is given in [data/raw_track_data/LVMS_2d_centerline_banking.csv](data/raw_track_data/LVMS_2d_centerline_banking.csv). This track representation is especially suited for oval tracks with small slopes but large banking angles.
 2. Global $x$, $y$, and $z$ coordinates of track boundary pairs. An example for the Mount Panorama Circuit in Bathurst is given in [data/raw_track_data/mount_panorama_3d.csv](data/raw_track_data/mount_panorama_bounds_3d.csv)
@@ -100,8 +100,9 @@ For the gg-diagram generation (in polar coordinates) and track smoothing procedu
 
 ## References
 <a id="1">[1]</a> 
-tbd.
-
+M. Rowold, L. Ögretnmen, U. Kasolowsky and B. Lohmann, “Online Time-Optimal Trajectory Planning on
+Three-Dimensional Race Tracks,” accepted for 35th IEEE Intelligent Vehicles Symposium (IV 2023).
+Preprint available at: [https://arxiv.org/abs/2304.10954](https://arxiv.org/abs/2304.10954)
 
 <a id="2">[2]</a> 
 M. Veneri and M. Massaro, “A free-trajectory quasi-steady-state
