@@ -45,6 +45,7 @@ You can visualize the gg-diagrams and its diamond-shaped underapproximations wit
 ```
 python gg_diagram_generation/plot_gg_diagrams.py
 ```
+![gg_diagram](./doc/pic/gg_diagrams.png)
 
 Vehicle parameters can be changed or added in [data/vehicle_params](data/vehicle_params). If you add a vehicle or change the vehicle name you have to adapt the name in the above scripts accordingly.
 
@@ -85,6 +86,7 @@ You can visualize the global racing line with:
 ```
 python global_racing_line/plot_global_racing_line.py
 ```
+![racing_line](./doc/pic/racing_line.png)
 
 #### Local Racing Line (online)
 A simple class with a method to generate the local racing line from a given start state is provided in [src/local_racing_line_planner](src/local_racing_line_planner.py). A minimal example for a moving horizon racing line simulation can be started with:
@@ -92,6 +94,10 @@ A simple class with a method to generate the local racing line from a given star
 python local_racing_line/sim_local_racing_line.py
 ```
 This simulation assumes perfect racking, i.e., the racing line can be followed exactly until a new local racing line has been generated.
+
+In contrast to the global racing line the local racing line considers possible speed limits from a race control instance. In the parameters of the above file you can set a speed limit and the time after which it applies.
+
+![sim_racing_line](./doc/pic/sim_racing_line.png)
 
 ## Citing
 If you use the local racing line generation or diamond-shaped underapproximations of the gg-diagrams, please cite our work [[1]](#1).

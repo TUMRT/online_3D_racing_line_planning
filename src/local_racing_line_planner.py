@@ -217,8 +217,9 @@ class LocalRacinglinePlanner():
             safety_distance: float,
             prev_solution: dict,
             V_min: float = 5.0,
+            V_max: float = 1e3
     ):
-        V_max = self.vehicle_params['v_max']
+        V_max = min(self.vehicle_params['v_max'], V_max)
         raceline = self.__gen_raceline(
             s=s,
             V=max(V, V_min),

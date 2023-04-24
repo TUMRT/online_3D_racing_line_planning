@@ -29,18 +29,18 @@ g = 9.81
 
 fig_polar = plt.figure('Polar coordinates')
 ax_polar = fig_polar.add_subplot(projection='3d')
-ax_polar.set_title(f'Polar {frame} frame')
+ax_polar.set_title(f'Polar coordinates')
 
-fig_form = plt.figure('Diamond form')
+fig_form = plt.figure('Diamond shpaed')
 ax_diamond = fig_form.add_subplot()
-ax_diamond.set_title(f'Diamond for {frame} frame')
+ax_diamond.set_title(f'Diamond shaped underapproximations')
 
 X_test, Y_test = np.meshgrid(g_test, alpha_test, indexing='ij')
 for V in v_test:
     Z_test = np.zeros_like(X_test)
-    for g_i, g in enumerate(g_test):
+    for g_i, gt in enumerate(g_test):
         for alpha_i, alpha in enumerate(alpha_test):
-            Z_test[g_i, alpha_i] = gg_handler.rho_interpolator_no_margin([V, g, alpha])
+            Z_test[g_i, alpha_i] = gg_handler.rho_interpolator_no_margin([V, gt, alpha])
     ax_polar.plot_surface(Y_test, X_test, Z_test)
 
     gg_exponent = float(gg_handler.gg_exponent_interpolator(ca.vertcat(V, g)))
@@ -51,7 +51,7 @@ for V in v_test:
     rho_test = gg_handler.rho_interpolator_no_margin(np.array([V * np.ones_like(alpha_test), g * np.ones_like(alpha_test), alpha_test])).full().squeeze()
 
     # Form shape
-    tmp = ax_diamond.plot(np.cos(alpha_test) * rho_test, np.sin(alpha_test) * rho_test, label=f'V={V}, g={g}', alpha=0.3)
+    tmp = ax_diamond.plot(np.cos(alpha_test) * rho_test, np.sin(alpha_test) * rho_test, label=f'$V$={V}, $\\tilde{{g}}$={g}', alpha=0.3)
     ay_array = np.linspace(-ay_max, ay_max, 200)
     ax_array = np.zeros_like(ay_array)
     for i, ay in enumerate(ay_array):
@@ -62,12 +62,12 @@ for V in v_test:
     ax_diamond.plot(ay_array, np.minimum(ax_array, ax_max), color=tmp[0].get_color())
     ax_diamond.plot(ay_array, -ax_array, color=tmp[0].get_color())
 
-ax_polar.set_xlabel('alpha')
-ax_polar.set_ylabel('g-force')
+ax_polar.set_xlabel(r'$\alpha$')
+ax_polar.set_ylabel(r'$\tilde{g}$')
 ax_polar.set_zlabel(r'$\rho$')
 
-ax_diamond.set_xlabel(r'$a_\mathrm{y}$')
-ax_diamond.set_ylabel(r'$a_\mathrm{x}$')
+ax_diamond.set_xlabel(r'$\tilde{a}_\mathrm{y}$')
+ax_diamond.set_ylabel(r'$\tilde{a}_\mathrm{x}$')
 ax_diamond.legend()
 ax_diamond.set_aspect('equal')
 

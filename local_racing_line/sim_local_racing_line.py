@@ -11,12 +11,14 @@ params = {
     'track_name': 'mount_panorama_3d_smoothed.csv',
     'optimization_horizon': 300.0,  # in meter
     'vehicle_name': 'dallaraAV21',
-    'gg_mode': 'diamond',  # polar or diamond
+    'gg_mode': 'polar',  # polar or diamond
     'gg_margin': 0.0,
     'safety_distance': 0.5,  # in meter
+    'V_max': None,  # V_max in m/s (set to None for limitless)
+    'V_max_after': 40.0  # apply V_max after x seconds (simulation time)
 }
 # next state assuming perfect tracking of the racing line and 100ms calculation time
-assumed_calc_time = 0.1
+assumed_calc_time = 0.1  # needed since the visualization is not the fastest
 
 # paths
 dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -79,8 +81,13 @@ chi = 0.0
 ax = 0.0
 ay = 0.0
 racing_line = None
+sim_time = 0.0
 
 while 1:
+    V_max = 1e3
+    if params['V_max'] is not None and sim_time > params['V_max_after']:
+        V_max = params['V_max']
+
     racing_line = local_raceline_planner.calc_raceline(
         s=s,
         V=V,
@@ -90,6 +97,7 @@ while 1:
         ay=ay,
         safety_distance=params['safety_distance'],
         prev_solution=racing_line,
+        V_max=V_max
     )
 
     visualizer.update(
@@ -114,5 +122,7 @@ while 1:
     chi = np.interp(assumed_calc_time, racing_line['t'], racing_line['chi'])
     ax = np.interp(assumed_calc_time, racing_line['t'], racing_line['ax'])
     ay = np.interp(assumed_calc_time, racing_line['t'], racing_line['ay'])
+
+    sim_time += assumed_calc_time
 
 # EOF

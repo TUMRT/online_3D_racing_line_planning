@@ -12,7 +12,7 @@ def export_point_mass_ode_model(
         neglect_euler: bool = True,
         neglect_centrifugal: bool = True,
         neglect_w_dot: bool = False,
-        w_slack_V: float = 20.0,
+        w_slack_V: float = 50.0,
 ):
 
     model_name = 'point_mass_ode'
