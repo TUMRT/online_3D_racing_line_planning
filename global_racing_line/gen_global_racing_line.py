@@ -21,8 +21,8 @@ params = {
     'neglect_w_dot': False,
     'neglect_V_omega': False,
     'V_guess': 6.0,  # initial velocity guess
-    'w_jx': 1e-2,  # cost weight for jerk
-    'w_jy': 1e-2,
+    'w_jx': 1e-2,  # cost weight for jerk x-direction
+    'w_jy': 1e-2,  # cost weight for jerk y-direction
     'w_T': 1e0,  # cost weight for time (should be 1)
     'RK4_steps': 1,
     'sol_opts': {
@@ -316,6 +316,7 @@ def calc_global_raceline(
     return trajectory_data_frame
 
 if __name__ == '__main__':
+    os.makedirs(os.path.join(raceline_out_path), exist_ok=True)
     raceline = calc_global_raceline(
             track_name=params['track_name'],
             vehicle_params=params['vehicle_params'],
