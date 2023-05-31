@@ -15,4 +15,4 @@ from track3D import Track3D
 
 track_handler = Track3D(path=os.path.join(in_data_path, track_name))
 
-track_handler.visualize()
+track_handler.visualize(threeD=True)

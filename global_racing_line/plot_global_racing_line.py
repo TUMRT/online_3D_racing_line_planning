@@ -12,6 +12,7 @@ params = {
     #'track_name': 'mount_panorama_3d_smoothed.csv',
     #'raceline_name': 'mount_panorama_3d_dallaraAV21_timeoptimal.csv',
     'vehicle_name': 'dallaraAV21',
+    'plot_3D': True,
 }
 
 # paths
@@ -60,10 +61,12 @@ def visualize_trajectory(track_path, raceline_path):
         V=v_opt, n=n_opt, chi=chi_opt, ax=ax_opt, ay=ay_opt, s=s_opt, h=params['vehicle_params']['h']
     )
 
-    ax = track_handler.visualize(show=False)
+    ax = track_handler.visualize(show=False, threeD=params['plot_3D'])
     ax.set_title(f'Racing line {os.path.split(raceline_path)[-1]}')
-    ax.plot(track_handler.x + normal_vector[0] * n_opt, track_handler.y + normal_vector[1] * n_opt, track_handler.z + normal_vector[2] * n_opt, color='red')
-
+    if params['plot_3D']:
+        ax.plot(track_handler.x + normal_vector[0] * n_opt, track_handler.y + normal_vector[1] * n_opt, track_handler.z + normal_vector[2] * n_opt, color='red')
+    else:
+        ax.plot(track_handler.x + normal_vector[0] * n_opt, track_handler.y + normal_vector[1] * n_opt, color='red')
     fig, ax = plt.subplots(nrows=5, num='Racing line')
     ax[0].grid()
     ax[0].plot(s_opt, v_opt, label=r'$V$')

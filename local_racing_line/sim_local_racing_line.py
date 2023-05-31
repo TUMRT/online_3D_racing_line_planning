@@ -70,7 +70,8 @@ local_raceline_planner = LocalRacinglinePlanner(
 visualizer = Visualizer(
     track_handler=track_handler,
     gg_handler=gg_handler,
-    vehicle_params=params['vehicle_params']
+    vehicle_params=params['vehicle_params'],
+    threeD=False,
 )
 
 # simulation start state

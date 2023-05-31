@@ -695,7 +695,7 @@ class Track3D:
 
             plt.show()
 
-    def visualize(self, show: bool = True, ax=None):
+    def visualize(self, show: bool = True, ax=None, threeD: bool = False):
         if not self.track_locked:
             raise RuntimeError('Cannot visualize. Track is not locked.')
 
@@ -705,18 +705,21 @@ class Track3D:
         # Create figure.
         if ax is None:
             fig = plt.figure('Track')
-            ax_track = plt.axes(projection='3d')
+            ax_track = plt.axes(projection='3d') if threeD else plt.axes()
         else:
             ax_track = ax
 
         ax_track.grid()
-        ax_track.set_box_aspect((np.ptp(left[0]), np.ptp(left[1]), np.ptp(left[2])))  # aspect ratio is 1:1:1 in data space
-
-
-        # Plot left border.
-        ax_track.plot(left[0], left[1], left[2], 'k')
-        # Plot right border.
-        ax_track.plot(right[0], right[1], right[2], 'k')
+        if threeD:
+            ax_track.set_box_aspect((np.ptp(left[0]), np.ptp(left[1]), np.ptp(left[2])))  # aspect ratio is 1:1:1 in data space
+            # plot track boundaries
+            ax_track.plot(left[0], left[1], left[2], 'k')
+            ax_track.plot(right[0], right[1], right[2], 'k')
+        else:
+            ax_track.set_aspect('equal')  # aspect ratio is 1:1 in data space
+            # plot track boundaries
+            ax_track.plot(left[0], left[1], 'k')
+            ax_track.plot(right[0], right[1], 'k')
 
         fig, ax = plt.subplots(nrows=3, num='Track angular information')
         ax[0].grid()

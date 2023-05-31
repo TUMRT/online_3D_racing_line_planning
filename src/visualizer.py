@@ -13,23 +13,32 @@ class Visualizer():
             track_handler,
             gg_handler,
             vehicle_params,
+            threeD: bool = False,
     ):
         self.track_handler = track_handler
         self.gg_handler = gg_handler
         self.vehicle_params = vehicle_params
+        self.threeD = threeD
 
         plt.ion()
         self.fig = plt.figure()
         gs = gridspec.GridSpec(2, 2, height_ratios=[1, 2], width_ratios=[1, 1], figure=self.fig)
 
-        axis_track = plt.subplot(gs[:, 0], projection='3d')
+        axis_track = plt.subplot(gs[:, 0], projection='3d' if threeD else None)
         axis_track.grid()
         # plot track bounds
         left, right = track_handler.get_track_bounds()
-        axis_track.plot(left[0], left[1], left[2], color='k')
-        axis_track.plot(right[0], right[1], right[2], color='k')
-        axis_track.set_box_aspect((np.ptp(left[0]), np.ptp(left[1]), np.ptp(left[2])))
-        self.rl_line, = axis_track.plot3D([0], [0], [0], color='r')
+        if self.threeD:
+            axis_track.plot(left[0], left[1], left[2], color='k')
+            axis_track.plot(right[0], right[1], right[2], color='k')
+            axis_track.set_box_aspect((np.ptp(left[0]), np.ptp(left[1]), np.ptp(left[2])))
+            self.rl_line, = axis_track.plot3D([0], [0], [0], color='r')
+        else:
+            axis_track.plot(left[0], left[1], color='k')
+            axis_track.plot(right[0], right[1], color='k')
+            axis_track.set_aspect('equal')
+            self.rl_line, = axis_track.plot([0], [0], color='r')
+
 
         self.axis_traj = plt.subplot(gs[0, 1])
         self.axis_traj.set_xlabel("t")
@@ -108,7 +117,8 @@ class Visualizer():
         ])
         self.rl_line.set_xdata(racing_line['x'])
         self.rl_line.set_ydata(racing_line['y'])
-        self.rl_line.set_3d_properties(racing_line['z'])
+        if self.threeD:
+            self.rl_line.set_3d_properties(racing_line['z'])
         self.V_line.set_xdata(racing_line['t'])
         self.V_line.set_ydata(racing_line['V'])
         self.ax_line.set_xdata(racing_line['t'])
