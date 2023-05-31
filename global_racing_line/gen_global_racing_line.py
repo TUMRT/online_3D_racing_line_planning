@@ -23,6 +23,7 @@ params = {
     'V_guess': 6.0,  # initial velocity guess
     'w_jx': 1e-2,  # cost weight for jerk x-direction
     'w_jy': 1e-2,  # cost weight for jerk y-direction
+    'w_Omega_z': 0.0,  # cost weight for curvature in road plane (e.g. 1e3)
     'w_T': 1e0,  # cost weight for time (should be 1)
     'RK4_steps': 1,
     'sol_opts': {
@@ -60,6 +61,7 @@ def calc_global_raceline(
         w_T: float,
         w_jx: float,
         w_jy: float,
+        w_Omega_z: float,
         RK4_steps: int,
         V_guess: float,
         neglect_w_omega_x: bool,
@@ -131,12 +133,14 @@ def calc_global_raceline(
     dax = jx / s_dot
     day = jy / s_dot
 
+    dOmega_z = track_handler.Omega_z_interpolator(s) + dchi  # curvature in road plane
+
     # Create ODE vector.
     dx = ca.vertcat(dV, dn, dchi, dax, day)
 
     # Objective function.
     L_t = w_T * 1.0 / s_dot
-    L_reg = w_jx * (jx / s_dot) ** 2 + w_jy * (jy / s_dot) ** 2
+    L_reg = w_jx * (jx / s_dot) ** 2 + w_jy * (jy / s_dot) ** 2 + w_Omega_z * dOmega_z ** 2
 
     # Discrete time dynamics using fixed step Runge-Kutta 4 integrator.
     M = RK4_steps  # RK4 steps per interval
@@ -326,6 +330,7 @@ if __name__ == '__main__':
             w_T=params['w_T'],
             w_jx=params['w_jx'],
             w_jy=params['w_jy'],
+            w_Omega_z=params['w_Omega_z'],
             RK4_steps=params['RK4_steps'],
             V_guess=params['V_guess'],
             neglect_w_omega_x=params['neglect_w_omega_x'],

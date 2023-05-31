@@ -7,7 +7,9 @@ def export_point_mass_ode_model(
         gg_handler,
         optimization_horizon: float,
         gg_mode: str = 'polar',
-        weight_jerk: float = 1e-2,
+        weight_jx: float = 1e-2,
+        weight_jy: float = 1e-2,
+        weight_dOmega_z: float = 0.0,
         neglect_w_terms: bool = True,
         neglect_euler: bool = True,
         neglect_centrifugal: bool = True,
@@ -72,6 +74,8 @@ def export_point_mass_ode_model(
     f_dax = jx / s_dot
     f_day = jy / s_dot
 
+    f_dOmega_z = track_handler.Omega_z_interpolator(s) + f_dchi
+
     # explicit
     f_expl = ca.vertcat(
         f_ds,
@@ -93,7 +97,7 @@ def export_point_mass_ode_model(
     model.u = u
 
     # cost for time optimality
-    model.cost_expr_ext_cost = 1.0 / s_dot + weight_jerk * (jx / s_dot)**2 + weight_jerk * (jy / s_dot)**2 + \
+    model.cost_expr_ext_cost = 1.0 / s_dot + weight_jx * (jx / s_dot)**2 + weight_jy * (jy / s_dot)**2 + weight_dOmega_z * f_dOmega_z ** 2 + \
                                w_slack_V/optimization_horizon*(epsilon_V / s_dot) + w_slack_V/10.0/optimization_horizon*(epsilon_V / s_dot)**2
 
     # apparent accelerations
