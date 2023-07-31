@@ -107,8 +107,8 @@ For the gg-diagram generation (in polar coordinates) and track smoothing procedu
 ## References
 <a id="1">[1]</a> 
 M. Rowold, L. Ögretnmen, U. Kasolowsky and B. Lohmann, “Online Time-Optimal Trajectory Planning on
-Three-Dimensional Race Tracks,” accepted for 35th IEEE Intelligent Vehicles Symposium (IV 2023).
-Preprint available at: [https://arxiv.org/abs/2304.10954](https://arxiv.org/abs/2304.10954)
+Three-Dimensional Race Tracks,” in 2023 IEEE Intelligent Vehicles Symposium (IV). IEEE, 2023, pp. 1-8.
+Available at: [https://ieeexplore.ieee.org/document/10186701](https://ieeexplore.ieee.org/document/10186701)
 
 <a id="2">[2]</a> 
 M. Veneri and M. Massaro, “A free-trajectory quasi-steady-state
