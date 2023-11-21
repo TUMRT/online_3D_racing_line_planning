@@ -2,7 +2,8 @@ import os
 import sys
 
 # examples
-track_name = 'LVMS_3d_smoothed.csv'
+track_name = 'IMS_3d_smoothed.csv'
+# track_name = 'LVMS_3d_smoothed.csv'
 # track_name = 'mount_panorama_3d_smoothed.csv'
 
 # paths

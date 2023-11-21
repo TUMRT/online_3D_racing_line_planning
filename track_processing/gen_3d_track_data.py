@@ -6,9 +6,15 @@ import sys
 #               - '3d_bounds_to_3d': generate 3d track data out of 3d track bounds
 
 # examples
+track_name_raw = 'IMS_2d_centerline_banking.csv'
+processing_method = '2d_to_3d'
+track_name_processed = 'IMS_3d.csv'
+
+"""
 track_name_raw = 'LVMS_2d_centerline_banking.csv'
 processing_method = '2d_to_3d'
 track_name_processed = 'LVMS_3d.csv'
+"""
 
 """
 track_name_raw = 'mount_panorama_bounds_3d.csv'

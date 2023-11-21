@@ -7,8 +7,10 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 params = {
-    'track_name': 'LVMS_3d_smoothed.csv',
-    'raceline_name': 'LVMS_3d_dallaraAV21_timeoptimal.csv',
+    'track_name': 'IMS_3d_smoothed.csv',
+    'raceline_name': 'IMS_3d_dallaraAV21_timeoptimal.csv',
+    # 'track_name': 'LVMS_3d_smoothed.csv',
+    # 'raceline_name': 'LVMS_3d_dallaraAV21_timeoptimal.csv',
     # 'track_name': 'mount_panorama_3d_smoothed.csv',
     # 'raceline_name': 'mount_panorama_3d_dallaraAV21_timeoptimal.csv',
     'vehicle_name': 'dallaraAV21',
